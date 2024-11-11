@@ -52,11 +52,12 @@ def int_to_string(integer: int) -> str:
     dictionary = { 1 : "1", 2 : "2", 3 : "3", 4 : "4", 5 : "5", 6 : "6", 7 : "7", 8 : "8", 9 : "9", 0 : "0"}
     newString = ""
     
-    
     while integer > 0:
         newString += dictionary.get(integer % 10)
         integer //= 10
+        
     newString = newString[::-1]
+    
     return newString
     
     
@@ -69,13 +70,52 @@ def int_to_string(integer: int) -> str:
 # non alfanumerici, a parte gli spazi, e convertire le parole in minuscolo.
 # Usare la funzione `isalnum()` per testare i caratteri.
 def word_frequency(string: str) -> List[Tuple[str, int]]:
-    pass
-
+    listResult = {}
+    tempList = []
+    newList = []
+    
+    if(not string.isalnum()):
+        for char in string:
+            if((not (( "z" >= char >= "a") or ( "Z" >= char >= "A") or char == " "))):
+                string = string.replace(char, "")
+                
+    string = string.lower()
+    tempList = string.split(" ")
+    
+    for word in tempList:
+        listResult.update({word : string.count(word)}) 
+        
+    for key in listResult.keys():
+        newList.append((listResult.get(key), key))
+    newList.sort()
+    return newList
+    
+        
 
 # Scrivere una funzione che data una stringa di numeri interi separati da spazi,
 # ritorna la lista ordinata dei numeri interi con frequenza massima.
 def number_frequency(string: str) -> List[int]:
-    pass
+    dictionary = {}
+    tempList = string.split(" ")
+    maximum = 0
+    
+    for integer in tempList:
+        dictionary[integer] = dictionary.get(integer, 0) + 1
+    print(dictionary)
+    
+    maximum = max(dictionary.values())
+    
+    newList = []
+    
+    for keys in dictionary.keys():
+        if(dictionary[keys] == maximum):
+            newList.append(int(keys))
+    
+    newList.sort()
+    
+    return newList
+    
+    
 
 
 # Implementare una funzione *ricorsiva* che data una lista contenente valori
