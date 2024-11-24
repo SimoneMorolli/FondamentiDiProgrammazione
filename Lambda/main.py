@@ -1,0 +1,1 @@
+#Spiegazioni lambda function
