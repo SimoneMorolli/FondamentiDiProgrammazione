@@ -91,10 +91,19 @@ def matrix_matrix_mul(A: List[List[int]], B: List[List[int]]) -> List[List[int]]
     resultMatrix = []
     
     if collNumA == rawNumB:
-        for rawA in A:
-            
-                
-            
+        for rawA in A:  
+            j = 0
+            temp = 0
+            count = 0
+            tempList = []
+            while count < collNumB:
+                for i in range(rawNumB):
+                    temp += rawA[i] * B[i][j]
+                tempList.append(temp)
+                temp = 0
+                j += 1
+                count += 1  
+            resultMatrix.append(tempList)
     else:
         resultMatrix = None
     return resultMatrix
@@ -105,15 +114,47 @@ def matrix_matrix_mul(A: List[List[int]], B: List[List[int]]) -> List[List[int]]
 # Per leggere/scrivere l'immagine usare i comandi load/save del modulo "images" visto a lezione.
 # Controllare il file risultante per verificare la correttezza della funzione (non vengono effettuati test automatici)
 def img_rotate_right_and_flip_v(img_in: str, img_out : str):
-    pass
+    imgStart = images.load(img_in)
+    newImage = newMatrixEmpty(len(imgStart), len(imgStart[0]))
+    newImgRow = len(newImage)
+    imgStartColl = len(imgStart[0])
+    newImgColl = len(newImage[0])
+    imgStartRow = len(imgStart)
+    
+    
+    
+    for i in range(imgStartRow):
+        for j in range(imgStartColl):
+            newImage[j][imgStartRow - i - 1] = imgStart[i][j]
 
+    newFlippedImg = newMatrixEmpty(newImgColl, newImgRow)
+    for i in range(newImgRow):
+        for j in range(newImgColl):
+            newFlippedImg[i][newImgColl - j - 1] = newImage[i][j]
+    
+    images.save(newFlippedImg, img_out)
+    
+    
+def newMatrixEmpty(coll: int, row: int):
+    newMatrix = [[0 for _ in range(coll)] for _ in range(row)]
+    return newMatrix
+    
 # Definire una funzione che dato il nome di un file (img_in) contenente un'immagine,
 # calcola l'immagine con i canali rosso e blu invertiti.
 # L'immagine risultante viene salvata nel file con nome indicato come parametro (img_out)
 # Per leggere/scrivere l'immagine usare i comandi load/save del modulo "images" visto a lezione.
 # Controllare il file risultante per verificare la correttezza della funzione (non vengono effettuati test automatici)
 def img_invert_channels(img_in: str, img_out : str):
-    pass
+    startImg = images.load(img_in)
+    newImg = []
+    
+    for row in startImg:
+        tempList = []
+        for element in row:
+            newTuple = (element[2], element[1], element[0])
+            tempList.append(newTuple)
+        newImg.append(tempList)
+    images.save(newImg, img_out)
 
 # Definire una funzione che dato il nome di un file (img_in) contenente un'immagine,
 # calcola un'immagine in cui ognuno dei 3 canali è quantizzato su 128 possibili valori (cioè, ogni canale può solo assumere 128 valori anzichè 256).
@@ -122,7 +163,16 @@ def img_invert_channels(img_in: str, img_out : str):
 # Per leggere/scrivere l'immagine usare i comandi load/save del modulo "images" visto a lezione.
 # Controllare il file risultante per verificare la correttezza della funzione (non vengono effettuati test automatici)
 def img_quantize(img_in: str, img_out : str):
-    pass
+    startImg = images.load(img_in)
+    newImg = []
+    
+    for row in startImg:
+        tempList = []
+        for element in row:
+            newTuple = (element[0] // 2, element[1] // 2, element[2] // 2)
+            tempList.append(newTuple)
+        newImg.append(tempList)
+    images.save(newImg, img_out)
 
 # Definire una funzione che dato il nome di un file (img_in) contenente un'immagine,
 # calcola un'immagine in cui la metà destra dell'immagine è scambiata con la metà sinistra.
@@ -133,7 +183,18 @@ def img_quantize(img_in: str, img_out : str):
 # Per leggere/scrivere l'immagine usare i comandi load/save del modulo "images" visto a lezione.
 # Controllare il file risultante per verificare la correttezza della funzione (non vengono effettuati test automatici)
 def img_invert_half(img_in: str, img_out : str):
-    pass
+    startImg = images.load(img_in)
+    newHalfLeftImg = newMatrixEmpty(len(startImg[0]) // 2, len(startImg))
+    newHalfRightImg = newMatrixEmpty(len(startImg[0]) // 2, len(startImg))
+    newImg = newMatrixEmpty(len(startImg[0]), len(startImg))
+    
+    for i in range(len(startImg)):
+        for j in range(len(startImg[0]) // 2):
+            newImg[i][j + len(startImg[0]) // 2] = startImg[i][j]
+            newImg[i][j] = startImg[i][j + len(startImg[0]) // 2]
+
+
+    images.save(newImg, img_out)
 
 # Test funzioni
 check_test(transpose, [[5, 3], [2, 1]], [[5, 2], [3, 1]])
